@@ -1,6 +1,4 @@
-﻿// Learn more about F# at http://fsharp.org
-
-open System
+﻿open System
 
 open System.IO
 open System.Reflection
@@ -10,13 +8,23 @@ open FSharp.Compiler.SourceCodeServices
 
 let root = Path.GetFullPath("../../../../sample")
 let binDirectory = Path.Combine(root, "bin/Debug/netcoreapp3.1/")
-let source = Path.Combine(root, "Program.fs")
 let output = Path.Combine(binDirectory, "sample.dll")
 
 let dependencies = [
     "C:\\Users\\flore\\.nuget\\packages\\expecto\\9.0.0\\lib\\netstandard2.0\\Expecto.dll"
     "C:\\Users\\flore\\.nuget\\packages\\fsharp.core\\4.7.1\\lib\\netstandard2.0\\FSharp.Core.dll"
 ]
+let sources =
+    [
+        "Module1.fs"
+        "Module2.fs"
+        "Module3.fs"
+        "Module4.fs"
+        "Module5.fs"
+        "Module6.fs"
+        "Program.fs"
+    ] |> List.map (fun name -> Path.Combine(root, name))
+    
 let arguments = [|
     "fsc.exe"
     "-o:" + output
@@ -32,7 +40,7 @@ let arguments = [|
     yield! dependencies |> Seq.map (fun path -> "-r:" + path)
     "--nocopyfsharpcore"
     "--simpleresolution"
-    source
+    yield! sources
 |]
 
 let searchEntryPoint (assembly:Assembly) =

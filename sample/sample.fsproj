@@ -5,6 +5,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Module1.fs" />
+    <Compile Include="Module2.fs" />
+    <Compile Include="Module3.fs" />
+    <Compile Include="Module4.fs" />
+    <Compile Include="Module5.fs" />
+    <Compile Include="Module6.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />

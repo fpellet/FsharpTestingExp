@@ -9,7 +9,7 @@ let tests =
     }
 
     test "another test that fails" {
-      Expect.equal (3+3) 4 "3+3"
+      Expect.equal (3+3) 3 "3+3"
     }
 
     testAsync "this is an async test" {
@@ -21,6 +21,13 @@ let tests =
       let! n = Task.FromResult 2
       Expect.equal n 2 "n=2"
     }
+    
+    Sample1.tests
+    Sample2.tests
+    Sample3.tests
+    Sample4.tests
+    Sample5.tests
+    Sample6.tests
   ]
   |> testLabel "samples"
 

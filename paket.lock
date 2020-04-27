@@ -17,6 +17,7 @@ NUGET
     Microsoft.NETCore.Platforms (3.1)
     Microsoft.NETCore.Targets (3.1)
     Mono.Cecil (0.11.2)
+    NFluent (2.7)
     System.Buffers (4.5.1)
     System.Collections.Immutable (1.7)
       System.Memory (>= 4.5.3) - restriction: || (&& (== netcoreapp3.1) (>= net46)) (&& (== netcoreapp3.1) (< netcoreapp2.1)) (&& (== netcoreapp3.1) (< netstandard2.0)) (&& (== netcoreapp3.1) (>= uap10.1)) (== netstandard2.0)

@@ -177,5 +177,79 @@ module Exp3 =
              andStartsWith "Bat"
              andContains "Robins"
          }
-     
 
+module Exp4 =
+    open Exp1
+
+    type Tester() =
+        [<CustomOperation("check")>]
+        member x.Check(comp, func) = []
+
+        member x.For(comp) = []
+        member x.Yield(comp) = []
+ 
+    let test = Tester()
+
+    // Not need to ignore result, but need bracket
+    test {
+        check ([| 1; 2; 3; 4; 5; 666 |] |> contains [3; 5; 666])
+
+        check (
+            "Batman and Robin"
+            |> notContains "Joker"
+            |> andStartsWith "Bat"
+            |> andContains "Robins"
+        )
+        
+    }
+
+module Exp5 =
+    open Exp1
+    
+    type Tester() =
+        member x.Bind(comp, func) = []
+        member x.YieldFrom(comp) = []
+        member x.Combine(comp, func) = []
+        member x.Delay(func) = []
+        member x.For(comp) = []
+        member x.Yield(comp) = []
+        member x.Zero(comp) = []
+     
+    let test = Tester()
+    
+    // (!) operator: Not need to ignore result and bracket, but 'yield' or 'do' isn't human friendly
+    test {
+        yield! [| 1; 2; 3; 4; 5; 666 |] |> contains [3; 5; 666]
+    
+        do! "Batman and Robin"
+            |> notContains "Joker"
+            |> andStartsWith "Bat"
+            |> andContains "Robins"
+    }
+          
+module Exp6 =
+    open Exp1
+              
+    type Tester() =
+        member x.Combine(comp, func) = ()
+        member x.Delay(func) = func() |> ignore
+        member x.Yield(comp) = ()
+        member x.Zero(comp) = ()
+               
+    let test = Tester()
+              
+    // Little tricky, use Delay operator. Catch all not ignored values and execute check
+    // I don't known if it's usefull on a real project
+    let tests =
+        test {
+            let values = [| 1; 2; 3; 4; 5; 666 |]
+
+            values |> contains [3; 5; 666]
+              
+            "Batman and Robin"
+                |> notContains "Joker"
+                |> andStartsWith "Bat"
+                |> andContains "Robins"
+        }
+
+          

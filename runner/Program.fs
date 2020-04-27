@@ -10,10 +10,12 @@ let root = Path.GetFullPath("../../../../sample")
 let binDirectory = Path.Combine(root, "bin/Debug/netcoreapp3.1/")
 let output = Path.Combine(binDirectory, "sample.dll")
 
-let dependencies = [
-    "C:\\Users\\flore\\.nuget\\packages\\expecto\\9.0.0\\lib\\netstandard2.0\\Expecto.dll"
-    "C:\\Users\\flore\\.nuget\\packages\\fsharp.core\\4.7.1\\lib\\netstandard2.0\\FSharp.Core.dll"
-]
+let dependenciesRootDirectory = Path.GetFullPath("../../../../packages")
+let dependencies =
+    [
+        "Expecto\\lib\\netstandard2.0\\Expecto.dll"
+        "FSharp.Core\\lib\\netstandard2.0\\FSharp.Core.dll"
+    ] |> List.map (fun name -> Path.Combine(dependenciesRootDirectory, name))
 let sources =
     [
         "Module1.fs"

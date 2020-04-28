@@ -1,4 +1,5 @@
 #r "packages/NFluent/lib/netstandard2.0/NFluent.dll"
+#r "packages/Unquote/lib/netstandard2.0/Unquote.dll"
 
 open NFluent
 open System
@@ -252,4 +253,41 @@ module Exp6 =
                 |> andContains "Robins"
         }
 
-          
+module Exp7 =
+    open Exp1
+    open Swensen.Unquote
+    open Microsoft.FSharp.Quotations
+
+    let inline test (expr:Expr<#ICheckLink<_>>) =
+        expr.Eval()
+        |> ignore
+        
+    // use unquote but improve error message with helper method
+    let tests =
+        test <@ [| 1; 2; 3; 4; 5; 666 |] |> contains [3; 5; 666] @>
+
+        test <@ "Batman and Robin"
+                |> notContains "Joker"
+                |> andStartsWith "Bat"
+                |> andContains "Robins" @>
+
+module Exp8 =
+    type NFluentCheck = Check
+
+    type Check() = class end
+        with 
+            static member That<'a>(value:'a[]) =
+                NFluentCheck.That(value :> IEnumerable<'a>)
+            static member That(value: string) =
+                NFluentCheck.That(value)
+        
+    // use dot method. Can use autocompletion, but it's not fsharp style
+    // have same problem that exp1, need ignore result
+    let tests =
+        Check.That([| 1; 2; 3; 4; 5; 666 |])
+             .Contains([3; 5; 666]) |> ignore
+
+        Check.That("Batman and Robin")
+             .Not.Contains("Joker")
+             .And.StartsWith("Bat")
+             .And.Contains("Robins") |> ignore

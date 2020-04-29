@@ -318,4 +318,34 @@ module Exp9 =
 
         shouldContains [3; 5; 666] withValue [| 1; 2; 3; 4; 5; 666 |]
         shouldContains [3; 5; 666] andContains [1] withValue [| 1; 2; 3; 4; 5; 666 |]
+        
+module Exp10 =
+    let contains expected next =
+        next (Exp1.contains expected)
+        
+    let andContains<'a> (asserts: 'a[] -> ICheckLink<ICheck<IEnumerable<'a>>>) (expected: 'a list) next =
+        next (fun (value: 'a[]) -> (asserts value).And.Contains(expected :> IEnumerable<'a>) :> ICheckLink<ICheck<IEnumerable<'a>>>) 
+        
+    let checkThat value asserts =
+        asserts value |> ignore
+       
+    let (|?>) value asserts =
+        checkThat value |> asserts
 
+    let (-?) = (|?>)
+    let (=>) = (|?>)
+    let (=?>) = (|?>)
+    let (==) = (|?>)
+    let (--) = (|?>)
+
+    // Same idea that Exp9, but add operator to change priority
+    let tests =
+        checkThat [| 1; 2; 3; 4; 5; 666 |] |> contains [3; 5; 666]
+        checkThat [| 1; 2; 3; 4; 5; 666 |] |> contains [3; 5; 666] andContains [1]
+
+        [| 1; 2; 3; 4; 5; 666 |] |?> contains [3; 5; 666] andContains [1]
+        [| 1; 2; 3; 4; 5; 666 |] -? contains [3; 5; 666] andContains [1]
+        [| 1; 2; 3; 4; 5; 666 |] => contains [3; 5; 666] andContains [1]
+        [| 1; 2; 3; 4; 5; 666 |] =?> contains [3; 5; 666] andContains [1]
+        [| 1; 2; 3; 4; 5; 666 |] == contains [3; 5; 666] andContains [1]
+        [| 1; 2; 3; 4; 5; 666 |] -- contains [3; 5; 666] andContains [1]

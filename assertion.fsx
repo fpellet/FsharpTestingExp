@@ -310,6 +310,9 @@ module Exp9 =
     let andContains<'a> (asserts: 'a[] -> ICheckLink<ICheck<IEnumerable<'a>>>) (expected: 'a list) next =
         next (fun (value: 'a[]) -> (asserts value).And.Contains(expected :> IEnumerable<'a>) :> ICheckLink<ICheck<IEnumerable<'a>>>) 
 
+    // Use currying to eliminate any noise
+    // I have not idea to chain asserts with checkThat. The return type should be ignored
+    // shouldXXX can solve this problem, because withValue is always the last parameters
     let tests =
         checkThat [| 1; 2; 3; 4; 5; 666 |] contains [3; 5; 666]
 

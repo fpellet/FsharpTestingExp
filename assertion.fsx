@@ -262,14 +262,16 @@ module Exp7 =
         expr.Eval()
         |> ignore
         
+    let check = test
+
     // use unquote but improve error message with helper method
     let tests =
         test <@ [| 1; 2; 3; 4; 5; 666 |] |> contains [3; 5; 666] @>
 
-        test <@ "Batman and Robin"
-                |> notContains "Joker"
-                |> andStartsWith "Bat"
-                |> andContains "Robins" @>
+        check <@ "Batman and Robin"
+                    |> notContains "Joker"
+                    |> andStartsWith "Bat"
+                    |> andContains "Robins" @>
 
 module Exp8 =
     type NFluentCheck = Check

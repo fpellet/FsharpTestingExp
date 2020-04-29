@@ -293,3 +293,26 @@ module Exp8 =
              .Not.Contains("Joker")
              .And.StartsWith("Bat")
              .And.Contains("Robins") |> ignore
+
+module Exp9 =
+    let contains value expected =
+        Exp1.contains expected value
+
+    let checkThat value assertion =
+        assertion value >> ignore
+
+    let shouldContains expected next =
+        next (Exp1.contains expected)
+
+    let withValue asserts value =
+        asserts value |> ignore
+
+    let andContains<'a> (asserts: 'a[] -> ICheckLink<ICheck<IEnumerable<'a>>>) (expected: 'a list) next =
+        next (fun (value: 'a[]) -> (asserts value).And.Contains(expected :> IEnumerable<'a>) :> ICheckLink<ICheck<IEnumerable<'a>>>) 
+
+    let tests =
+        checkThat [| 1; 2; 3; 4; 5; 666 |] contains [3; 5; 666]
+
+        shouldContains [3; 5; 666] withValue [| 1; 2; 3; 4; 5; 666 |]
+        shouldContains [3; 5; 666] andContains [1] withValue [| 1; 2; 3; 4; 5; 666 |]
+

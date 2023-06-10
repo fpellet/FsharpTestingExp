@@ -1,2 +1,5 @@
 fsharp.core
 fsharp.compiler.service
+Microsoft.Build.Framework
+NuGet.Frameworks
+Ionide.ProjInfo

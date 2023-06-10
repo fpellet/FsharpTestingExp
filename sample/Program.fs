@@ -9,7 +9,11 @@ let tests =
     }
 
     test "another test that fails" {
-      Expect.equal (3+3) 3 "3+3"
+      Expect.equal (3+3) 9 "3+3"
+    }
+
+    test "External test" {
+      Expect.equal (3+2) (sample2.Say.getValue2()) "3+3"
     }
 
     testAsync "this is an async test" {
